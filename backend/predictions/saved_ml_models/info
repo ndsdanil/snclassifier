@@ -1,0 +1,1 @@
+#This folder created to save models from create_ULMFiT_model.py code. Be careful with commit, model can be bigger than 100 mb and you will surpass the github treshold.
