@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <title>youtube classifier</title>
+            {% load static %}
+            <link rel="stylesheet" href="{% static 'youtube_classifier/styles.css' %}">
+            <script>
+                const csrfToken = "{{ csrf_token }}";
+                document.addEventListener("DOMContentLoaded", function() {
+                    document.getElementById("myForm").addEventListener("submit", function(event) {
+                        event.preventDefault();
+                        const userInput = document.getElementById("userInput").value;
+                        fetch('/youtube_classifier/process_data/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken,  // Make sure to include the CSRF token
+                            },
+                            body: JSON.stringify({ user_input: userInput })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            
+                            // Process the data and update the frontend
+                            const negativeDiv = document.getElementById("negativeDiv");
+                            const neutralDiv = document.getElementById("neutralDiv");
+                            const positiveDiv = document.getElementById("positiveDiv");
+
+                            // Select the second list (index 1) from listOfLists
+                            const negativeList = data[0];
+                            const neutralList = data[1];
+                            const positiveList = data[2];
+
+                            // Join the selected list values into a string for display, e.g., separated by commas
+                            const negjoinedValues = negativeList.join("<br><br>");
+                            const neujoinedValues = neutralList.join("<br><br>");
+                            const posjoinedValues = positiveList.join("<br><br>");
+
+                            // Update the content of the <div> with the joined values
+                                negativeDiv.innerHTML = negjoinedValues;
+                                neutralDiv.innerHTML = neujoinedValues;
+                                positiveDiv.innerHTML = posjoinedValues;
+                            //document.getElementById("negativeDiv").innerHTML = data[Comment];
+                        });
+                    });
+                });
+            </script>
+        </head>
+        <body>
+            <h1>Youtube classifier</h1>
+            <p>Get insights about youtube english comments sentiment. </p>
+            <p>Place youtube video link in a section bellow and get comments assessment (negative &#x1F922, neitral &#x1F610, positive &#x1F604) </p>
+            <form id="myForm">
+                <input type="text" placeholder="place link here" id="userInput">
+                <input type="submit" value="Submit">
+            </form>
+            <div id="container">
+                <div class="column">
+                    <h3 class="column_title">negative &#x1F922</h3>
+                    <div id="negativeDiv" class="scroll" style="font-size: 16px; font: optional;"></div>
+                </div>
+                <div class="column">
+                    <h3 class="column_title">neitral &#x1F610</h3>
+                    <div id="neutralDiv" class="scroll"  style="font-size: 16px; font: optional;"></div>
+                </div>
+                <div class="column">
+                    <h3 class="column_title">positive &#x1F604</h3>
+                    <div id="positiveDiv" class="scroll"  style="font-size: 16px; font: optional;"></div>
+                </div>
+            </div>
+        </body>
+    </html>
