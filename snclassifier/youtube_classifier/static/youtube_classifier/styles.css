@@ -3,7 +3,8 @@ padding: 5px;
 margin-top: 2px;
 margin-left:10px;
 margin-right: 10px;
-font-size: 16px;
+font: 24px/36px sans-serif;
+font-size: 5px;
 border: 2px solid rgb(181, 178, 178);
 width: 600px;
 height: 1000px;
@@ -25,22 +26,54 @@ border-radius: 10px;
 background: gray;
 }
 
-.head_scroll {
-   
-    margin-left:50px;
-    font: 24px/36px sans-serif;}
+.head_scroll { 
+margin-left:50px;
+font: 24px/36px sans-serif;}
 
 #container {
-    display: flex;
-    flex-wrap: wrap;
+display: flex;
+flex-wrap: wrap;
 }
 .column {
-    display: flex;
-    flex-direction: column;
-  }
+display: flex;
+flex-direction: column;
+}
 
-  .column_title {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-  }
+.column_title {
+display: flex;
+flex-direction: column;
+text-align: center;
+}
+  
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #3498db; /* Change color as needed */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Ensure it's on top */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.overlay {
+  background: rgba(193, 188, 188, 0.7);
+  backdrop-filter: blur(3px); /* Apply a blur effect to the background */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none; /* Initially hidden */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it's on top */
+}
+

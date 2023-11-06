@@ -5,6 +5,8 @@ from fastai.text.all import *
 import pandas as pd
 from langdetect import detect
 import re
+import numpy as np
+import tensorflow as tf
 
 #filepath = "snclassifier/youtube_classifier/predictions/datasets/comments.csv" 
 #comments= pd.read_csv(filepath)
@@ -81,6 +83,7 @@ def get_youtube_predictions(comments):
     learn = load_learner('/home/nds/projects/my_snclassifier/snclassifier/youtube_classifier/predictions/saved_ml_models/ULMFiT_model.pkl')
     #preprocess imput data, load input dataframe in fastai dataloader(test_dl)
     comments = preprocess_data(comments)
+    comments = comments.reset_index(drop=True)
     test_dl = learn.dls.test_dl(comments["Comment"])
 
     #Make prediction
@@ -90,9 +93,12 @@ def get_youtube_predictions(comments):
     #print(f" Predictions after argmax: {predicted_classes}")
     #print(comments["Sentiment"])
 
-    pred_dataframe = pd.DataFrame(predicted_classes, columns=["Preds"])
+    numpy_array = predicted_classes.numpy()
+    #print(f"Length of comments before concat: {comments.info()}")
+    pred_dataframe = pd.DataFrame(numpy_array, columns=["Preds"])
+    #print(f"Length of preddataframe column: {pred_dataframe.info()}")
     comments["Predictions"] = pred_dataframe["Preds"]
-
+    #print(f"Length of tensor with predictions: {predicted_classes.len()}")
     # Print the result
 
     #print(comments.columns)

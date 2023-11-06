@@ -7,9 +7,32 @@
             <script>
                 const csrfToken = "{{ csrf_token }}";
                 document.addEventListener("DOMContentLoaded", function() {
+                    const overlay = document.getElementById('overlay');
+                    const spinner = document.getElementById('spinner');
+
+                    function showOverlay() {
+                    overlay.style.display = 'flex';
+                    }
+
+                    function hideOverlay() {
+                    overlay.style.display = 'none';
+                    }
+
+                    function showSpinner() {
+                    showOverlay();
+                    spinner.style.display = 'block';
+                    }
+
+                    function hideSpinner() {
+                    hideOverlay();
+                    spinner.style.display = 'none';
+                    }
+                    
                     document.getElementById("myForm").addEventListener("submit", function(event) {
+                        showSpinner();
                         event.preventDefault();
                         const userInput = document.getElementById("userInput").value;
+                        
                         fetch('/youtube_classifier/process_data/', {
                             method: 'POST',
                             headers: {
@@ -30,6 +53,9 @@
                             const negativeList = data[0];
                             const neutralList = data[1];
                             const positiveList = data[2];
+                            const procent0 = data[3]
+                            const procent1 = data[4]
+                            const procent2 = data[5]
 
                             // Join the selected list values into a string for display, e.g., separated by commas
                             const negjoinedValues = negativeList.join("<br><br>");
@@ -40,7 +66,12 @@
                                 negativeDiv.innerHTML = negjoinedValues;
                                 neutralDiv.innerHTML = neujoinedValues;
                                 positiveDiv.innerHTML = posjoinedValues;
+                                document.getElementById("negative_title").innerHTML = "negative &#x1F922 (" + procent0 + "%)";
+                                document.getElementById("neutral_title").innerHTML = "neitral &#x1F610 (" + procent1 + "%)";
+                                document.getElementById("positive_title").innerHTML = "positive &#x1F604 (" + procent2 + "%)";
                             //document.getElementById("negativeDiv").innerHTML = data[Comment];
+                            document.getElementById("userInput").value = "";
+                            hideSpinner();
                         });
                     });
                 });
@@ -54,18 +85,22 @@
                 <input type="text" placeholder="place link here" id="userInput">
                 <input type="submit" value="Submit">
             </form>
+            <div id="overlay" class="overlay">
+                <div id="spinner" class="spinner">
+                </div>
+            </div>
             <div id="container">
                 <div class="column">
-                    <h3 class="column_title">negative &#x1F922</h3>
-                    <div id="negativeDiv" class="scroll" style="font-size: 16px; font: optional;"></div>
+                    <h3 class="column_title" id="negative_title">negative &#x1F922</h3>
+                    <div id="negativeDiv" class="scroll" style="font-size: 16px; font: sans-serif;"></div>
                 </div>
                 <div class="column">
-                    <h3 class="column_title">neitral &#x1F610</h3>
-                    <div id="neutralDiv" class="scroll"  style="font-size: 16px; font: optional;"></div>
+                    <h3 class="column_title" id="neutral_title">neitral &#x1F610</h3>
+                    <div id="neutralDiv" class="scroll"  style="font-size: 16px; font: sans-serif;"></div>
                 </div>
                 <div class="column">
-                    <h3 class="column_title">positive &#x1F604</h3>
-                    <div id="positiveDiv" class="scroll"  style="font-size: 16px; font: optional;"></div>
+                    <h3 class="column_title" id="positive_title">positive &#x1F604</h3>
+                    <div id="positiveDiv" class="scroll"  style="font-size: 16px; font: sans-serif;"></div>
                 </div>
             </div>
         </body>
